@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "flask_ujson"
+name = "flask-ujson"
 authors = [{name = "David Carmichael", email = "david@uilix.com"}]
 readme = "README.md"
 license = { file = "LICENSE" }

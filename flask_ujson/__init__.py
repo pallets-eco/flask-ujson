@@ -1,3 +1,5 @@
+"""Flask with UltraJSON."""
+
 import dataclasses
 import decimal
 import typing as t
@@ -6,11 +8,11 @@ from datetime import date
 
 import ujson
 from flask import Flask
-from flask.json.provider import DefaultJSONProvider
+from flask.json.provider import JSONProvider
+from flask.wrappers import Response
 from werkzeug.http import http_date
 
-if t.TYPE_CHECKING:  # pragma: no cover
-    from flask.wrappers import Response
+__version__ = "1.0.1"
 
 
 def _default(o: t.Any) -> t.Any:
@@ -29,8 +31,8 @@ def _default(o: t.Any) -> t.Any:
     raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
 
 
-class UJSONProvider(DefaultJSONProvider):
-    """Provide JSON operations using Python's built-in :mod:`json`
+class UJSONProvider(JSONProvider):
+    """Provide JSON operations using the UltraJSON
     library. Serializes the following additional data types:
 
     -   :class:`datetime.datetime` and :class:`datetime.date` are
@@ -46,7 +48,7 @@ class UJSONProvider(DefaultJSONProvider):
     default: t.Callable[[t.Any], t.Any] = staticmethod(
         _default
     )  # type: ignore[assignment]
-    """Apply this function to any object that :meth:`json.dumps` does
+    """Apply this function to any object that :meth:`ujson.dumps` does
     not know how to serialize. It should return a valid JSON type or
     raise a ``TypeError``.
     """
@@ -76,12 +78,12 @@ class UJSONProvider(DefaultJSONProvider):
     def dumps(self, obj: t.Any, **kwargs: t.Any) -> str:
         """Serialize data as JSON to a string.
 
-        Keyword arguments are passed to :func:`json.dumps`. Sets some
+        Keyword arguments are passed to :func:`ujson.dumps`. Sets some
         parameter defaults from the :attr:`default`,
         :attr:`ensure_ascii`, and :attr:`sort_keys` attributes.
 
         :param obj: The data to serialize.
-        :param kwargs: Passed to :func:`json.dumps`.
+        :param kwargs: Passed to :func:`ujson.dumps`.
         """
         kwargs.setdefault("default", self.default)
         kwargs.setdefault("ensure_ascii", self.ensure_ascii)
@@ -92,7 +94,7 @@ class UJSONProvider(DefaultJSONProvider):
         """Deserialize data as JSON from a string or bytes.
 
         :param s: Text or UTF-8 bytes.
-        :param kwargs: Passed to :func:`json.loads`.
+        :param kwargs: Passed to :func:`ujson.loads`.
         """
         return ujson.loads(s, **kwargs)
 
