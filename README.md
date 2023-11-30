@@ -5,6 +5,8 @@
 
 Flask with UltraJSON.
 
+[https://github.com/ultrajson/ultrajson](https://github.com/ultrajson/ultrajson)
+
 ```python
 from flask import Flask
 
