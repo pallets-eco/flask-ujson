@@ -6,7 +6,7 @@ ultra_json = UJSON()
 
 
 def create_app():
-    app = Flask(__name__)
+    _app = Flask(__name__)
     ultra_json.init_app(app)
 
     @app.route("/")
@@ -18,7 +18,7 @@ def create_app():
         """
         return {"hello": "world"}
 
-    return app
+    return _app
 
 
 if __name__ == "__main__":
