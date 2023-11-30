@@ -5,7 +5,13 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "flask_ujson"
 authors = [{name = "David Carmichael", email = "david@uilix.com"}]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
 dynamic = ["version", "description"]
-
+dependencies = [
+    "ujson >= 5.8.0",
+    "flask >= 3.0.0",
+]
 [project.urls]
-Home = "https://github.com"
+Home = "https://github.com/CheeseCake87/flask-ujson"
