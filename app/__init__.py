@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 from flask_ujson import UJSON
 
@@ -6,8 +6,8 @@ ultra_json = UJSON()
 
 
 def create_app():
-    _app = Flask(__name__)
-    ultra_json.init_app(app)
+    app = Flask(__name__)
+    ultra_json.init_app(app)  # Replaces the standard JSON encoder with UltraJSON
 
     @app.route("/")
     def index():
@@ -18,7 +18,14 @@ def create_app():
         """
         return {"hello": "world"}
 
-    return _app
+    @app.route("/jsonify")
+    def using_jsonify():
+        """
+        jsonify is not really needed for most cases, but here's an example.
+        """
+        return jsonify({"hello": "world"})
+
+    return app
 
 
 if __name__ == "__main__":
