@@ -24,7 +24,7 @@ def create_app():
     @app.route("/")
     def index():
         """
-        Outputs a JSON response using UltraJSON library
+        Outputs a JSON response using the UltraJSON library.
         https://github.com/ultrajson/ultrajson
         """
         return {"hello": "world"}
