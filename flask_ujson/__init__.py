@@ -45,73 +45,25 @@ class UJSONProvider(JSONProvider):
         method) will call the ``__html__`` method to get a string.
     """
 
-    default: t.Callable[[t.Any], t.Any] = staticmethod(_default)  # type: ignore[assignment]
-    """Apply this function to any object that :meth:`ujson.dumps` does
-    not know how to serialize. It should return a valid JSON type or
-    raise a ``TypeError``.
-    """
+    default: t.Callable[[t.Any], t.Any] = staticmethod(
+        _default
+    )  # type: ignore[assignment]
 
     ensure_ascii = True
-    """Replace non-ASCII characters with escape sequences. This may be
-    more compatible with some clients, but can be disabled for better
-    performance and size.
-    """
-
     sort_keys = True
-    """Sort the keys in any serialized dicts. This may be useful for
-    some caching situations, but can be disabled for better performance.
-    When enabled, keys must all be strings, they are not converted
-    before sorting.
-    """
-
     compact: bool | None = None
-    """If ``True``, or ``None`` out of debug mode, the :meth:`response`
-    output will not add indentation, newlines, or spaces. If ``False``,
-    or ``None`` in debug mode, it will use a non-compact representation.
-    """
-
     mimetype = "application/json"
-    """The mimetype set in :meth:`response`."""
 
     def dumps(self, obj: t.Any, **kwargs: t.Any) -> str:
-        """Serialize data as JSON to a string.
-
-        Keyword arguments are passed to :func:`ujson.dumps`. Sets some
-        parameter defaults from the :attr:`default`,
-        :attr:`ensure_ascii`, and :attr:`sort_keys` attributes.
-
-        :param obj: The data to serialize.
-        :param kwargs: Passed to :func:`ujson.dumps`.
-        """
         kwargs.setdefault("default", self.default)
         kwargs.setdefault("ensure_ascii", self.ensure_ascii)
         kwargs.setdefault("sort_keys", self.sort_keys)
         return ujson.dumps(obj, **kwargs)
 
     def loads(self, s: str | bytes, **kwargs: t.Any) -> t.Any:
-        """Deserialize data as JSON from a string or bytes.
-
-        :param s: Text or UTF-8 bytes.
-        :param kwargs: Passed to :func:`ujson.loads`.
-        """
         return ujson.loads(s, **kwargs)
 
     def response(self, *args: t.Any, **kwargs: t.Any) -> Response:
-        """Serialize the given arguments as JSON, and return a
-        :class:`~flask.Response` object with it. The response mimetype
-        will be "application/json" and can be changed with
-        :attr:`mimetype`.
-
-        If :attr:`compact` is ``False`` or debug mode is enabled, the
-        output will be formatted to be easier to read.
-
-        Either positional or keyword arguments can be given, not both.
-        If no arguments are given, ``None`` is serialized.
-
-        :param args: A single value to serialize, or multiple values to
-            treat as a list to serialize.
-        :param kwargs: Treat as a dict to serialize.
-        """
         obj = self._prepare_response_obj(args, kwargs)
         dump_args: dict[str, t.Any] = {}
 
