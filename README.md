@@ -19,7 +19,7 @@ ultra_json = UJSON()
 
 def create_app():
     app = Flask(__name__)
-    ultra_json.init_app(app)
+    ultra_json.init_app(app)  # Sets UltraJSON as the default JSON encoder
 
     @app.route("/")
     def index():
