@@ -12,7 +12,7 @@ from flask.json.provider import JSONProvider
 from flask.wrappers import Response
 from werkzeug.http import http_date
 
-__version__ = "1.0.3"
+__version__ = "1.0.5"
 
 
 def _default(o: t.Any) -> t.Any:
@@ -45,9 +45,7 @@ class UJSONProvider(JSONProvider):
         method) will call the ``__html__`` method to get a string.
     """
 
-    default: t.Callable[[t.Any], t.Any] = staticmethod(
-        _default
-    )  # type: ignore[assignment]
+    default: t.Callable[[t.Any], t.Any] = staticmethod(_default)  # type: ignore[assignment]
     """Apply this function to any object that :meth:`ujson.dumps` does
     not know how to serialize. It should return a valid JSON type or
     raise a ``TypeError``.
