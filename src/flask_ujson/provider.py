@@ -25,7 +25,7 @@ def _default(o: t.Any) -> t.Any:
     if isinstance(o, UUID):
         return str(o)
 
-    if dataclasses.is_dataclass(o):
+    if dataclasses.is_dataclass(o) and not isinstance(o, type):
         return dataclasses.asdict(o)
 
     if hasattr(o, "__html__"):
